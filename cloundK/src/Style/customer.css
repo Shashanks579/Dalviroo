@@ -1,0 +1,174 @@
+/* --- New Dish Selection Grid --- */
+.dish-selection-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+/* The scrollable box containing the dishes */
+.dish-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  max-height: 240px; /* Limits height so it doesn't take over the whole screen */
+  overflow-y: auto;  /* Adds a scrollbar only when you have 5+ dishes */
+  padding: 4px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: #f9fafb;
+}
+
+/* Custom Scrollbar for a cleaner look */
+.dish-list::-webkit-scrollbar {
+  width: 6px;
+}
+.dish-list::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}
+
+/* Individual Dish Cards */
+.dish-card {
+  padding: 14px 16px;
+  background-color: #ffffff;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.15s ease-in-out;
+  display: flex;
+  align-items: center;
+}
+
+.dish-card:hover {
+  border-color: #93c5fd;
+  transform: translateY(-1px);
+}
+
+.dish-card-name {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 1rem;
+}
+
+/* The Highlighted 'Selected' State */
+.dish-card.selected {
+  border-color: #2563eb;
+  background-color: #eff6ff;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+}
+
+.dish-card.selected .dish-card-name {
+  color: #1d4ed8;
+}
+
+/* Fix spacing for the quantity area */
+.quantity-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.loading-text {
+  text-align: center;
+  color: #6b7280;
+  padding: 20px;
+}
+
+/* 1. Hide the ugly default browser arrows on the number input */
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type="number"] {
+  -moz-appearance: textfield; /* For Firefox */
+}
+
+/* 2. Modernize the quantity input box */
+.simulator-input {
+  width: 100px; /* Stop it from stretching across the screen */
+  padding: 12px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  color: #1f2937;
+  background-color: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+  margin-top: 4px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.simulator-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+/* 3. The Call-to-Action Button */
+.submit-btn {
+  width: 100%; /* Keep the button full width to anchor the bottom of the card */
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #10b981; /* Premium green */
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2), 0 2px 4px -1px rgba(16, 185, 129, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.submit-btn:hover {
+  background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.3), 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px -1px rgba(16, 185, 129, 0.2);
+}
+
+/* --- Professional Status Message --- */
+.status-message {
+  margin-top: 24px;
+  padding: 14px 20px;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e293b;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #3b82f6; /* Clean blue accent */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  
+  /* Smooth slide-in animation when the message appears */
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { 
+    opacity: 0; 
+    transform: translateY(-10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}

@@ -1,0 +1,72 @@
+.kitchen-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+h2 {
+  color: #111;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.error-banner {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.dalviroo-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: white;
+}
+
+.dalviroo-table th, 
+.dalviroo-table td {
+  border: 1px solid #e0e0e0;
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.dalviroo-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #333;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.dalviroo-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.empty-row {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+  font-style: italic;
+}
+
+.done-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.done-btn:hover {
+  background-color: #218838;
+}

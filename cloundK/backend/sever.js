@@ -1,10 +1,13 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const http = require('http');
+const http = require('http'); // Required for creating the HTTP server to integrate with Socket.IO
 const {Server} = require('socket.io')
 const {Dish, Order} = require('./Sche');
-require('dotenv').config();
+
+
+
 const app = express();
 const server = http.createServer(app);
 
@@ -17,7 +20,7 @@ const io = new Server(server, {
     }
 });
 
-app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:5173" }));
+app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:5173" })); 
 app.use(express.json());
 
 // Placeholder middleware for authentication and authorization.
@@ -32,7 +35,7 @@ const authMiddleware = (req, res, next) => {
     next();
 };
 
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/Dishelo')
+mongoose.connect(process.env.MONGO_URI);
 
 app.get('/api/seed', authMiddleware, async (req, res) => {
   try {
@@ -93,7 +96,7 @@ app.post('/api/order', authMiddleware, async (req, res) =>{
 
        const newORDER = new Order({dish_id,quantity})
        await newORDER.save();
-       await newORDER.populate('dish_id', 'name');
+       await newORDER.populate('dish_id');
 
        io.emit('new_order', newORDER);
 
@@ -120,7 +123,7 @@ app.put('/api/dishes/:id', authMiddleware, async (req, res) =>{
         const updatedDish = await Dish.findByIdAndUpdate(
             id,
             {predicted: Number(predicted)},
-            {new: true}
+            {returnDocument: 'after'}
         );
 
         if(!updatedDish){
@@ -133,6 +136,15 @@ app.put('/api/dishes/:id', authMiddleware, async (req, res) =>{
 
     }catch (error){
         res.status(500).json({error:"Failed to update the prediction number"})
+    }
+});
+
+app.get('/api/orders/pending', async (req, res) => {
+    try {
+        const pendingOrders = await Order.find({ status: 'pending' }).populate('dish_id', 'name');
+        res.status(200).json(pendingOrders);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch queue' });
     }
 });
 
@@ -155,43 +167,68 @@ app.get('/api/report', authMiddleware, async(req, res) =>{
     }
 });
 
-io.on('connection', (socket) => {
-    console.log(`chef Screen connected: ${socket.id}`);
+app.get('/api/kitchen-queue', authMiddleware, async (req, res) => {
+    try {
+        // Fetch all pending orders and attach the dish stats
+        const pendingOrders = await Order.find({ status: 'pending' })
+            .populate('dish_id')
+            .sort({ created_at: 1 });
+            
+        res.status(200).json(pendingOrders);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch queue' });
+    }
+});
 
+app.post('/api/reset-day', authMiddleware, async (req, res) => {
+    try {
+        // 1. Delete all pending orders from the database
+        await Order.deleteMany({});
+        
+        // 2. Reset the 'created' count to 0 for all dishes
+        await Dish.updateMany({}, { $set: { created: 0 } });
+        
+        // 3. Broadcast the kill signal to all connected tabs
+        io.emit('day_reset');
+        
+        res.status(200).json({ message: "System reset successfully" });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to reset day" });
+    }
+});
+
+io.on('connection', (socket) => {
+    console.log(`Kitchen Screen connected: ${socket.id}`);
+
+    // Cook clicks "DONE"
     socket.on('mark_done', async (orderID) => {
-        // For demonstration, a basic API Key check during handshake is implemented for 'chef screen'.
-        const clientApiKey = socket.handshake.auth.apiKey;
-        if (!clientApiKey || clientApiKey !== process.env.API_KEY) {
-            console.warn(`Unauthorized attempt to mark order ${orderID} done by socket ${socket.id}. Invalid API Key.`);
-            return socket.emit('error', { message: 'Authorization required for this action.' });
-        }
-        if (!mongoose.Types.ObjectId.isValid(orderID)) {
-            console.warn(`Invalid orderID format received from socket ${socket.id}: ${orderID}`);
-            return;
-        }
-        try{
+        try {
             const order = await Order.findByIdAndUpdate(
                 orderID,
-                {status: 'completed'},
-                {new: true}
+                { status: 'completed' },
+                { returnDocument: 'after' }
             );
-            if (order){
-                const updateDishNum = await Dish.findByIdAndUpdate(
+
+            if (order) {
+                // Get the updated dish data after doing the math
+                const updatedDish = await Dish.findByIdAndUpdate(
                     order.dish_id,
-                    {$inc: {created: order.quantity}},
-                    {new: true}
+                    { $inc: { created: order.quantity } },
+                    { returnDocument: 'after' } // Must be true to return the new numbers
                 );
 
                 io.emit('order_cleared', orderID);
-
-                io.emit('totals_updated', updateDishNum)
+                
+                // NEW LINE: Tell all screens the created count went up
+                io.emit('totals_updated', updatedDish);
             }
-        }catch(error){
+        } catch(error) {
             console.error('Error marking order done:', error);
         }
-    })
-    socket.on('disconnect', () =>{
-        console.log(`chef Screen disconnected: ${socket.id}`);
+    });
+
+    socket.on('disconnect', () => {
+        console.log(`Kitchen Screen disconnected: ${socket.id}`);
     });
 });
 

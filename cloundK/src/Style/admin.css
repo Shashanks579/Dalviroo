@@ -1,0 +1,166 @@
+.admin-container {
+  max-width: 900px;
+  margin: 40px auto;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.admin-header h2 {
+  margin: 0;
+  color: #111;
+}
+
+.download-btn {
+  background-color: #0f172a;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.download-btn:hover { background-color: #1e293b; }
+
+.admin-table th { background-color: #e2e8f0; }
+
+.dish-name-cell {
+  font-weight: bold;
+  color: #334155;
+}
+
+.live-number {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #059669; /* Green to indicate positive progress */
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-input {
+  width: 80px;
+  padding: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.admin-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.save-btn {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.save-btn:hover:not(:disabled) { background-color: #2563eb; }
+.save-btn:disabled {
+  background-color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+/* Inherit the base table styles from your global CSS or repeat them here */
+.dalviroo-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: white;
+}
+.dalviroo-table th, .dalviroo-table td {
+  border: 1px solid #e0e0e0;
+  padding: 14px 16px;
+  text-align: left;
+}
+
+/* --- Add Dish Form Styles --- */
+.admin-controls {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.add-dish-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.add-input {
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+  flex-grow: 1; /* Name input takes up remaining space */
+}
+
+.add-input:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.add-number {
+  flex-grow: 0;
+  width: 120px;
+}
+
+.add-btn {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.add-btn:hover {
+  background-color: #059669;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.reset-btn {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.reset-btn:hover {
+  background-color: #fca5a5;
+  color: #7f1d1d;
+}
